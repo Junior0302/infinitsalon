@@ -741,9 +741,18 @@ const Navbar = ({
                 <Phone size={16} />
                 <span className="text-sm">{CONTACT.phone}</span>
               </a>
-              <a href={CONTACT.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-3 py-2">
-                <WhatsAppIcon size={16} />
-                <span className="text-sm">{CONTACT.whatsappLabel}</span>
+              <a
+                href={CONTACT.whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}
+                className="flex items-center justify-between gap-3 rounded-xl border border-[#1C1C1C] bg-black/20 px-3 py-3 hover:border-white transition-colors"
+              >
+                <span className="flex items-center gap-3">
+                  <WhatsAppIcon size={16} />
+                  <span className="text-sm">WhatsApp</span>
+                </span>
+                <span className="text-sm whitespace-nowrap">{CONTACT.whatsappLabel}</span>
               </a>
               <a href={CONTACT.emailHref} className="flex items-center gap-3 py-2">
                 <span className="text-sm font-subtitle">Email</span>
@@ -803,9 +812,18 @@ const Footer = ({
             <Phone size={18} className="mt-1 shrink-0" />
             <span>{CONTACT.phone}</span>
           </a>
-          <a href={CONTACT.whatsappHref} target="_blank" rel="noreferrer" className="flex items-start gap-3">
-            <WhatsAppIcon size={18} className="mt-1 shrink-0" />
-            <span>{CONTACT.whatsappLabel}</span>
+          <a
+            href={CONTACT.whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}
+            className="flex items-start justify-between gap-3 rounded-xl border border-[#1C1C1C] bg-black/20 px-4 py-3 hover:border-white transition-colors"
+          >
+            <span className="flex items-start gap-3">
+              <WhatsAppIcon size={18} className="mt-1 shrink-0" />
+              <span>WhatsApp</span>
+            </span>
+            <span className="whitespace-nowrap">{CONTACT.whatsappLabel}</span>
           </a>
           <div className="flex items-start gap-3">
             <MapPin size={18} className="mt-1 shrink-0" />
@@ -1009,10 +1027,14 @@ const Home = ({
                 href={CONTACT.whatsappHref}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}
                 className="rounded-2xl border border-white bg-white text-black px-5 py-4 transition-transform transition-colors hover:translate-y-[-2px] hover:bg-[#EDEDED]"
               >
-                <span className="block font-subtitle text-[10px] mb-2">WhatsApp</span>
-                <span className="block text-sm sm:text-base">{CONTACT.whatsappLabel}</span>
+                <span className="flex items-center gap-3 mb-2">
+                  <WhatsAppIcon size={18} />
+                  <span className="font-subtitle text-[10px]">WhatsApp</span>
+                </span>
+                <span className="block text-sm sm:text-base font-medium whitespace-nowrap">{CONTACT.whatsappLabel}</span>
               </a>
               <a
                 href={CONTACT.phoneHref}
@@ -1211,29 +1233,30 @@ const Booking = ({ locale }: { locale: Locale }) => {
           href={CONTACT.whatsappHref}
           target="_blank"
           rel="noreferrer"
-          className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors"
+          aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}
+          className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors rounded-2xl"
         >
-          <WhatsAppIcon className="mb-6" />
+          <WhatsAppIcon className="mb-6 text-white" />
           <h2 className="font-title text-3xl mb-4">{copy.booking.whatsappTitle}</h2>
           <p className="text-[#B6B6B6] leading-7 mb-6">{copy.booking.whatsappText}</p>
-          <span className="font-subtitle text-xs inline-flex items-center gap-2">{CONTACT.whatsappLabel}</span>
+          <span className="font-subtitle text-xs inline-flex items-center gap-2 whitespace-nowrap">{CONTACT.whatsappLabel}</span>
         </a>
 
-        <a href={CONTACT.phoneHref} className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors">
+        <a href={CONTACT.phoneHref} className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors rounded-2xl">
           <Phone className="mb-6" />
           <h2 className="font-title text-3xl mb-4">{copy.booking.phoneTitle}</h2>
           <p className="text-[#B6B6B6] leading-7 mb-6">{copy.booking.phoneText}</p>
-          <span className="font-subtitle text-xs">{CONTACT.phone}</span>
+          <span className="font-subtitle text-xs whitespace-nowrap">{CONTACT.phone}</span>
         </a>
 
-        <div className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8">
+        <div className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 rounded-2xl">
           <MapPin className="mb-6" />
           <h2 className="font-title text-3xl mb-4">{copy.booking.addressTitle}</h2>
           <p className="text-[#B6B6B6] leading-7 mb-6">{copy.booking.addressText}</p>
           <span className="font-subtitle text-xs">{CONTACT.address}</span>
         </div>
 
-        <a href={CONTACT.emailHref} className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors">
+        <a href={CONTACT.emailHref} className="border border-[#1C1C1C] bg-[#111111] p-6 sm:p-8 hover:border-white transition-colors rounded-2xl">
           <p className="font-subtitle text-xs text-white mb-6">{copy.email}</p>
           <h2 className="font-title text-3xl mb-4">{copy.booking.emailTitle}</h2>
           <p className="text-[#B6B6B6] leading-7 mb-6">{copy.booking.emailText}</p>
