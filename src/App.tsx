@@ -235,6 +235,15 @@ const CONTACT = {
   },
 };
 
+const getStoredLocale = (): Locale => {
+  if (typeof window === 'undefined') {
+    return 'fr';
+  }
+
+  const savedLocale = window.localStorage.getItem('infinity-salon-locale');
+  return savedLocale === 'en' ? 'en' : 'fr';
+};
+
 const CATEGORY_LABELS: Record<GalleryCategory, LocalizedText> = {
   all: { fr: 'Tous', en: 'All' },
   locs: { fr: 'Locs', en: 'Locs' },
@@ -519,7 +528,16 @@ const useScrollReveal = (deps?: ReadonlyArray<unknown>) => {
     );
 
     const elements = document.querySelectorAll('.reveal-element');
-    elements.forEach((element) => observer.observe(element));
+    elements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const isAlreadyVisible = rect.top < window.innerHeight - 80 && rect.bottom > 0;
+
+      if (isAlreadyVisible) {
+        element.classList.add('revealed');
+      }
+
+      observer.observe(element);
+    });
 
     return () => {
       elements.forEach((element) => observer.unobserve(element));
@@ -589,6 +607,25 @@ const SectionHeading = ({ eyebrow, title, text }: { eyebrow: string; title: stri
     <p className="font-subtitle text-xs text-[#8A8A8A] mb-4">{eyebrow}</p>
     <h2 className="font-title text-4xl sm:text-5xl md:text-6xl text-white mb-6">{title}</h2>
     <p className="text-[#B6B6B6] leading-7">{text}</p>
+  </div>
+);
+
+const LoadingScreen = ({ locale }: { locale: Locale }) => (
+  <div className="min-h-[100svh] bg-[#0A0A0A] text-white flex items-center justify-center px-6">
+    <div className="text-center max-w-md w-full">
+      <p className="font-subtitle text-xs text-[#8A8A8A] mb-5">{locale === 'fr' ? 'Chargement' : 'Loading'}</p>
+      <h1 className="font-title text-5xl sm:text-6xl mb-6">
+        INFINITY <span className="text-[#8A8A8A] font-light">SALON</span>
+      </h1>
+      <div className="mx-auto mb-6 h-[2px] w-32 overflow-hidden bg-[#1C1C1C]">
+        <div className="h-full w-1/2 bg-white animate-pulse" />
+      </div>
+      <p className="text-[#B6B6B6] leading-7">
+        {locale === 'fr'
+          ? 'Preparation de votre experience premium...'
+          : 'Preparing your premium experience...'}
+      </p>
+    </div>
   </div>
 );
 
@@ -862,7 +899,7 @@ const Home = ({
   const [videoOpen, setVideoOpen] = useState(false);
   const copy = UI[locale];
 
-  useScrollReveal();
+  useScrollReveal([locale]);
   useSEO(copy.home.seoTitle, copy.home.seoDescription, locale);
   useEscapeToClose(videoOpen, () => setVideoOpen(false));
 
@@ -1066,7 +1103,7 @@ const Services = ({
   locale: Locale;
 }) => {
   const copy = UI[locale];
-  useScrollReveal();
+  useScrollReveal([locale]);
   useSEO(copy.services.seoTitle, copy.services.seoDescription, locale);
 
   return (
@@ -1111,7 +1148,7 @@ const Services = ({
 const Gallery = ({ locale }: { locale: Locale }) => {
   const [filter, setFilter] = useState<GalleryCategory>('all');
   const copy = UI[locale];
-  useScrollReveal();
+  useScrollReveal([locale, filter]);
   useSEO(copy.gallery.seoTitle, copy.gallery.seoDescription, locale);
 
   const filteredImages = filter === 'all' ? GALLERY_IMAGES : GALLERY_IMAGES.filter((item) => item.category === filter);
@@ -1161,7 +1198,7 @@ const About = ({
   locale: Locale;
 }) => {
   const copy = UI[locale];
-  useScrollReveal();
+  useScrollReveal([locale]);
   useSEO(copy.about.seoTitle, copy.about.seoDescription, locale);
 
   return (
@@ -1269,18 +1306,17 @@ const Booking = ({ locale }: { locale: Locale }) => {
 
 const App = () => {
   const [activePage, setActivePage] = useState<Page>('home');
-  const [locale, setLocale] = useState<Locale>('fr');
-
-  useEffect(() => {
-    const savedLocale = window.localStorage.getItem('infinity-salon-locale');
-    if (savedLocale === 'fr' || savedLocale === 'en') {
-      setLocale(savedLocale);
-    }
-  }, []);
+  const [locale, setLocale] = useState<Locale>(getStoredLocale);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.localStorage.setItem('infinity-salon-locale', locale);
   }, [locale]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsLoading(false), 850);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const currentPage = (() => {
     switch (activePage) {
@@ -1297,6 +1333,15 @@ const App = () => {
         return <Home setActivePage={setActivePage} locale={locale} />;
     }
   })();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[100svh] bg-[#0A0A0A] text-white">
+        <GlobalStyles />
+        <LoadingScreen locale={locale} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[100svh] bg-[#0A0A0A] text-white">
