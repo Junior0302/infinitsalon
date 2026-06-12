@@ -1028,7 +1028,7 @@ const Home = ({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`WhatsApp ${CONTACT.whatsappLabel}`}
-                className="rounded-2xl border border-white bg-white text-black px-5 py-4 transition-transform transition-colors hover:translate-y-[-2px] hover:bg-[#EDEDED]"
+                className="rounded-2xl border border-[#2A2A2A] bg-black/20 px-5 py-4 text-white transition-transform transition-colors hover:translate-y-[-2px] hover:border-white hover:bg-[#151515]"
               >
                 <span className="flex items-center gap-3 mb-2">
                   <WhatsAppIcon size={18} />
